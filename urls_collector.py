@@ -67,7 +67,9 @@ def run_cmd(desc, cmd):
 
 # ---------- URL Collection ----------
 def run_katana():
-    cmd = f"cat {input_file} | xargs -P 10 -I {{}} katana -list {{}} -silent -o {katana_output}"
+    # katana reads the host list directly with -list; -c sets concurrency.
+    # (The old xargs form misused -list per-host and let parallel procs clobber one -o file.)
+    cmd = f"katana -list {input_file} -silent -c 10 -o {katana_output}"
     run_cmd("Running Katana", cmd)
 
 def run_waybackurls():
